@@ -313,7 +313,7 @@ def play_track_artist_album(artist_ID):
 def play_track_album(album_ID):
     album=mongo.db.albums.find_one({'id': album_ID},{'_id': False})
     if not album:
-        return invalid_parent("Album ")
+        return not_found("")
     else:
         tracks=mongo.db.tracks.find({'album_id': album_ID},{'_id': False})
         for x in tracks: 
@@ -326,7 +326,7 @@ def play_track_album(album_ID):
 
 #@app.errorhandler(422)
 def invalid_parent(parent,error=None):
-    message=jsonify()
+    message=Response()
     message.status_code =422
     return message
 
@@ -334,42 +334,42 @@ def invalid_parent(parent,error=None):
 
 #@app.errorhandler(400)
 def invalid(error=None):
-    message=jsonify()
+    message=Response()
     message.status_code =400
     return message
 
 def deleted(model,error=None):
-    #message=jsonify({'message':"})
+    message=Response()
     message.status_code =204
     return message
 
 #@app.errorhandler(409)
 def exists(model,error=None):
-    message=jsonify()
+    message=Response()
     message.status_code =409
     return message
 
 #@app.errorhandler(404)
 def not_found(model,error=None):
-    message=jsonify()
+    message=Response()
     message.status_code =404
     return message
 
 @app.errorhandler(404)
 def error(model,error=None):
-    message=jsonify()
+    message=Response()
     message.status_code =405
     return message
 
 @app.errorhandler(405)
 def error_405(model,error=None):
-    message=jsonify()
+    message=Response()
     message.status_code =405
     return message
 
 @app.errorhandler(500)
 def error_2(model,error=None):
-    message=jsonify()
+    message=Response()
     message.status_code =400
     return message
 
