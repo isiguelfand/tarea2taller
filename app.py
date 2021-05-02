@@ -127,7 +127,7 @@ def create_album(artist_ID):
             url= "https://tarea2artistas.herokuapp.com/" + "albums/" +encoded 
             tracks= "https://tarea2artistas.herokuapp.com/" + "albums/" +encoded +"/tracks"
             artist= "https://tarea2artistas.herokuapp.com/" + "artists/"+artist_ID 
-            id = mongo.db.albums.insert_one({'name': name, 'id': encoded,'artist_id': artist_ID,'genre': genre,'self': url,'tracks': tracks})
+            id = mongo.db.albums.insert_one({'name': name, 'id': encoded,'artist_id': artist_ID,'artist': artist,'genre': genre,'self': url,'tracks': tracks})
             album=mongo.db.albums.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(album)
             response=Response(response,"application/json")
