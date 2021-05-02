@@ -86,7 +86,7 @@ def delete_albums(ID):
 
 @app.route('/tracks/<ID>',methods=['DELETE'])
 def delete_tracks(ID):
-    tracks=mongo.db.tracks.find_one({'id': ID},{'_id': False})
+    track=mongo.db.tracks.find_one({'id': ID},{'_id': False})
     if not track:
         return not_found("Canción ")
     else:
