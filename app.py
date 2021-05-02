@@ -53,6 +53,44 @@ def show_artist(ID):
         return response
 
 
+
+@app.route('/artists/<ID>',methods=['DELETE'])
+def delete_artist(ID):
+    user=mongo.db.users.find_one({'id': ID},{'_id': False})
+    if not user:
+        return not_found("Artista ")
+    else:
+        albums=mongo.db.albums.find({'artist_ID': ID},{'_id': False})
+        for x in albums:
+            mongo.db.tracks.delete_many({'album_id': x["id"]})
+        mongo.db.albums.delete_many({'artist_id': ID})
+        mongo.db.users.delete_many({'id': ID})
+        return deleted("Artista")
+
+
+
+@app.route('/albums/<ID>',methods=['DELETE'])
+def delete_albums(ID):
+    album=mongo.db.albums.find_one({'id': ID},{'_id': False})
+    if not album:
+        return not_found("Album ")
+    else:
+        mongo.db.tracks.delete_many({'album_id':ID})
+        mongo.db.tracks.delete_many({'id': ID})
+        return deleted("Album")
+
+@app.route('/tracks/<ID>',methods=['DELETE'])
+def delete_tracks(ID):
+    tracks=mongo.db.tracks.find_one({'id': ID},{'_id': False})
+    if not track:
+        return not_found("Canción ")
+    else:
+            mongo.db.tracks.delete_many({'id': ID})
+            return deleted("Canción")
+
+
+
+
 @app.route('/artists',methods=['GET'])
 def show_artists():
     users=mongo.db.users.find({},{'_id': False})
@@ -262,6 +300,11 @@ def invalid_parent(parent,error=None):
 def invalid(error=None):
     message=jsonify({'message': 'input inválido'})
     message.status_code =400
+    return message
+
+def deleted(model,error=None):
+    message=jsonify({'message': model + "eliminado"})
+    message.status_code =204
     return message
 
 #@app.errorhandler(409)
