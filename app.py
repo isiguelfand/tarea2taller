@@ -280,11 +280,11 @@ def play_track_artist(artist_ID):
     request.get_json(force=True)
     user=mongo.db.users.find_one({'id': artist_ID},{'_id': False})
     if not user:
-        return invalid_parent("Artista ")
+        return not_found("Artista ")
     else:
         tracks=mongo.db.tracks.find({'artist_id': artist_ID},{'_id': False})
         for x in tracks: 
-            mongo.db.tracks.update({'id': ID}, { "$set": { "times_played": track["times_played"]+1 } })
+            mongo.db.tracks.update({'artist_id': artist_ID}, { "$set": { "times_played": (track["times_played"]+1) } })
         response=Response("todas las canciones del artista fueron reproducidas","application/json")
         response.status_code =200
         return response
@@ -294,13 +294,11 @@ def play_track_artist_album(artist_ID):
     request.get_json(force=True)
     user=mongo.db.users.find_one({'id': artist_ID},{'_id': False})
     if not user:
-        return invalid_parent("Artista ")
+        return not_found("Artista ")
     else:
         albums=mongo.db.albums.find({'artist_id': artist_ID},{'_id': False})
         for x in albums: 
-                tracks=mongo.db.tracks.find({'album_id': x['id']},{'_id': False})
-                for y in tracks: 
-                    mongo.db.tracks.update({'id': ID}, { "$set": { "times_played": track["times_played"]+1 } })
+            mongo.db.tracks.update({'album_id': x['id']}, { "$set": { "times_played": (track["times_played"]+1) } })
 
         response=Response("todas las canciones del artista fueron reproducidas","application/json")
         response.status_code =200
