@@ -116,7 +116,7 @@ def create_album(artist_ID):
         genre=request.json["genre"]
     except KeyError:
         return invalid()
-    string= name+":"+artist_ID
+    string= name+":"+ artist_ID
     encoded = (b64encode(string.encode()).decode('utf-8'))[0:22]
     user=mongo.db.users.find_one({'id': artist_ID},{'_id': False})
     if not user:
@@ -171,7 +171,7 @@ def show_albums():
 def show_albums_artist(artist_ID):
     user=mongo.db.users.find_one({'id': artist_ID},{'_id': False})
     if not user:
-        return invalid_parent("Artista ")
+        return not_found("Artista ")
     albums=mongo.db.albums.find({'artist_id': artist_ID},{'_id': False})
     response=json_util.dumps(albums)
     response=Response(response,"application/json")
@@ -182,7 +182,7 @@ def show_albums_artist(artist_ID):
 def show_tracks_album(album_ID):
     album=mongo.db.albums.find_one({'id': album_ID},{'_id': False})
     if not album:
-        return invalid_parent("Album ")
+        return not_found("Album ")
     tracks=mongo.db.tracks.find({'artist_id': album_ID},{'_id': False})
     response=json_util.dumps(tracks)
     response=Response(response,"application/json")
@@ -253,7 +253,7 @@ def show_tracks():
 def show_tracks_artist(artist_ID):
     user=mongo.db.users.find_one({'id': artist_ID},{'_id': False})
     if not user:
-        return invalid_parent("Artista ")
+        return not_found("Artista ")
     tracks=mongo.db.tracks.find({'artist_id': artist_ID},{'_id': False})
     response=json_util.dumps(tracks)
     response=Response(response,"application/json")
@@ -351,7 +351,7 @@ def exists(model,error=None):
 
 #@app.errorhandler(404)
 def not_found(model,error=None):
-    message=jsonify({'message': model + 'no encontrado'})
+    message=jsonify({'message': ""})
     message.status_code =404
     return message
 
