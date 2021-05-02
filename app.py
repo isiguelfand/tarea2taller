@@ -298,7 +298,7 @@ def play_track_artist_album(artist_ID):
     else:
         albums=mongo.db.albums.find({'artist_id': artist_ID},{'_id': False})
         for x in albums: 
-            tracks=mongo.db.tracks.find({'album_id': x['id']}})
+            tracks=mongo.db.tracks.find({'album_id': x['id']})
             for y in tracks: 
                 mongo.db.tracks.update({'id': y['id']}, { "$set": { "times_played": y["times_played"]+1 } })
 
