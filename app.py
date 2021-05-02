@@ -198,7 +198,7 @@ def create_track(album_ID):
         duration=request.json["duration"]
     except KeyError:
         return invalid()
-    string= name+":"+artist_ID
+    string= name+":"+album_ID
     encoded = b64encode(string.encode()).decode('utf-8')[0:22]
     album=mongo.db.albums.find_one({'id': album_ID},{'_id': False})
     if not album:
@@ -210,7 +210,7 @@ def create_track(album_ID):
             url= "https://tarea2artistas.herokuapp.com/" + "tracks/"+ encoded 
             album= "https://tarea2artistas.herokuapp.com/albums"+ album_ID
             artist= "https://tarea2artistas.herokuapp.com/artists/"+ artist_ID 
-            id = mongo.db.tracks.insert_one({'name': name, 'id': encoded,'artist': artist,'duration': duration,'self': url,'album_id': album_ID,'times_played': 0, "album": abum})
+            id = mongo.db.tracks.insert_one({'name': name, 'id': encoded,'artist': artist,'duration': duration,'self': url,'album_id': album_ID,'times_played': 0, "album": album})
             track=mongo.db.tracks.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(track)
             response=Response(response,"application/json")
@@ -326,7 +326,7 @@ def play_track_album(album_ID):
 
 #@app.errorhandler(422)
 def invalid_parent(parent,error=None):
-    message=jsonify({'message': parent + ' no existe'})
+    message=jsonify()
     message.status_code =422
     return message
 
@@ -334,44 +334,44 @@ def invalid_parent(parent,error=None):
 
 #@app.errorhandler(400)
 def invalid(error=None):
-    message=jsonify({'message': 'input inválido'})
+    message=jsonify()
     message.status_code =400
-    return 400
+    return message
 
 def deleted(model,error=None):
     #message=jsonify({'message':"})
     message.status_code =204
-    return 204
+    return message
 
 #@app.errorhandler(409)
 def exists(model,error=None):
-    message=jsonify({'message': model + 'ya existe'})
+    message=jsonify()
     message.status_code =409
-    return 409
+    return message
 
 #@app.errorhandler(404)
 def not_found(model,error=None):
-    message=jsonify({'message': ""})
+    message=jsonify()
     message.status_code =404
-    return 404
+    return message
 
 @app.errorhandler(404)
 def error(model,error=None):
-    message=jsonify({'message': 'method not allowed'})
+    message=jsonify()
     message.status_code =405
-    return 405
+    return message
 
 @app.errorhandler(405)
 def error_405(model,error=None):
-    message=jsonify({'message': 'method not allowed'})
+    message=jsonify()
     message.status_code =405
-    return 405
+    return message
 
 @app.errorhandler(500)
 def error_2(model,error=None):
-    message=jsonify({'message': 'input inválido'})
+    message=jsonify()
     message.status_code =400
-    return 400
+    return message
 
 
 
