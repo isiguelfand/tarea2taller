@@ -81,7 +81,7 @@ def delete_albums(ID):
         return not_found("Album ")
     else:
         mongo.db.tracks.delete_many({'album_id':ID})
-        mongo.db.tracks.delete_many({'id': ID})
+        mongo.db.albums.delete_many({'id': ID})
         return deleted("Album")
 
 @app.route('/tracks/<ID>',methods=['DELETE'])
