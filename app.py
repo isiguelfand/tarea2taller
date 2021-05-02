@@ -198,7 +198,7 @@ def create_track(album_ID):
         duration=request.json["duration"]
     except KeyError:
         return invalid()
-    encoded = b64encode(name.encode()).decode('utf-8')[0:2]
+    encoded = b64encode(name.encode()).decode('utf-8')[0:22]
     album=mongo.db.albums.find_one({'id': album_ID},{'_id': False})
     if not album:
         return invalid_parent("Album")
@@ -209,7 +209,7 @@ def create_track(album_ID):
             url= "https://tarea2artistas.herokuapp.com/" + "tracks/"+ encoded 
             album= "https://tarea2artistas.herokuapp.com/albums"+ album_ID
             artist= "https://tarea2artistas.herokuapp.com/artists/"+ artist_ID 
-            id = mongo.db.tracks.insert_one({'name': name, 'id': encoded,'artist': artist,'duration': duration,'self': url,'album_id': album_ID,'times_played': 0})
+            id = mongo.db.tracks.insert_one({'name': name, 'id': encoded,'artist': artist,'duration': duration,'self': url,'album_id': album_ID,'times_played': 0, "album": abum})
             track=mongo.db.tracks.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(track)
             response=Response(response,"application/json")
