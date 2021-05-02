@@ -21,7 +21,7 @@ def create_artist():
     except KeyError:
         return invalid()
 
-    encoded = b64encode(name.encode()).decode('utf-8')[0:21]
+    encoded = b64encode(name.encode()).decode('utf-8')[0:22]
     if name and encoded and age:
         users=mongo.db.users.find_one({'id': encoded})
         if not users:
@@ -117,7 +117,7 @@ def create_album(artist_ID):
     except KeyError:
         return invalid()
 
-    encoded = b64encode(name.encode()).decode('utf-8')[0:21]
+    encoded = b64encode(name.encode()).decode('utf-8')[0:22]
     user=mongo.db.users.find_one({'id': artist_ID},{'_id': False})
     if not user:
         return invalid_parent("Artista ")
@@ -198,7 +198,7 @@ def create_track(album_ID):
         duration=request.json["duration"]
     except KeyError:
         return invalid()
-    encoded = b64encode(name.encode()).decode('utf-8')[0:21]
+    encoded = b64encode(name.encode()).decode('utf-8')[0:2]
     album=mongo.db.albums.find_one({'id': album_ID},{'_id': False})
     if not album:
         return invalid_parent("Album")
