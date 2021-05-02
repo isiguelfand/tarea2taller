@@ -336,42 +336,42 @@ def invalid_parent(parent,error=None):
 def invalid(error=None):
     message=jsonify({'message': 'input inválido'})
     message.status_code =400
-    return message
+    return 400
 
 def deleted(model,error=None):
-    message=jsonify({'message': model + "eliminado"})
+    message=jsonify({'message':"})
     message.status_code =204
-    return message
+    return 204
 
 #@app.errorhandler(409)
 def exists(model,error=None):
     message=jsonify({'message': model + 'ya existe'})
     message.status_code =409
-    return message
+    return 409
 
 #@app.errorhandler(404)
 def not_found(model,error=None):
     message=jsonify({'message': ""})
     message.status_code =404
-    return message
+    return 404
 
 @app.errorhandler(404)
 def error(model,error=None):
     message=jsonify({'message': 'method not allowed'})
     message.status_code =405
-    return message
+    return 405
 
 @app.errorhandler(405)
 def error_405(model,error=None):
     message=jsonify({'message': 'method not allowed'})
     message.status_code =405
-    return message
+    return 405
 
 @app.errorhandler(500)
 def error_2(model,error=None):
     message=jsonify({'message': 'input inválido'})
     message.status_code =400
-    return message
+    return 400
 
 
 
