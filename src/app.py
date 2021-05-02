@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, request, Response #, url_for, redirect, request
 from flask_pymongo import PyMongo
 from base64 import b64encode
@@ -7,7 +8,7 @@ from bson.objectid import ObjectId
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost/tarea"
 mongo=PyMongo(app)
-
+nombre="mongodb+srv://user:"+"tallerintegracion"+"@cluster0.eikb3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 @app.route('/artists',methods=['POST'])
 def create_artist():
     request.get_json(force=True)
@@ -69,7 +70,7 @@ def create_album(artist_ID):
     if name and encoded and genre:
         albums=mongo.db.albums.find_one({'id': encoded})
         if not albums:
-            url= request.base_url.replace("artists","").replace(artist_ID,"")+ "/"+encoded 
+            url= request.base_url.replace("artists/","").replace(artist_ID,"")+ "/"+encoded 
             tracks= request.base_url.replace("artists/","").replace(artist_ID,"")+  "/"+encoded + "/tracks"
             artist= request.base_url+ "/"+artist_ID 
             id = mongo.db.albums.insert_one({'name': name, 'id': encoded,'artist_id': artist_ID,'genre': genre,'url': url,'tracks': tracks})
