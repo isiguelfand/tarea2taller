@@ -6,9 +6,11 @@ from bson import json_util
 from bson.objectid import ObjectId
 #from flask_restful import Api, Resource
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost/tarea"
-mongo=PyMongo(app)
 nombre="mongodb+srv://user:"+"tallerintegracion"+"@cluster0.eikb3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+#app.config["MONGO_URI"] = "mongodb://localhost/tarea"
+app.config["MONGO_URI"] = nombre
+mongo=PyMongo(app)
+
 @app.route('/artists',methods=['POST'])
 def create_artist():
     request.get_json(force=True)
@@ -18,9 +20,9 @@ def create_artist():
     if name and encoded and age:
         users=mongo.db.users.find_one({'id': encoded})
         if not users:
-            albums= str(request.base_url)+  "/" + encoded + "/albums"
-            tracks= str(request.base_url)+  "/" + encoded + "/tracks"
-            url= str(request.base_url)+ "/"+ encoded 
+            albums= "https://tarea2artistas.herokuapp.com/artists/" + encoded + "/albums"
+            tracks= "https://tarea2artistas.herokuapp.com/artists/" + encoded + "/tracks"
+            url= "https://tarea2artistas.herokuapp.com/artists/" + encoded
             id = mongo.db.users.insert_one({'name': name, 'id': encoded,'albums': albums,'tracks': tracks,'url': url,'age': age})
             user=mongo.db.users.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(user)
@@ -70,9 +72,9 @@ def create_album(artist_ID):
     if name and encoded and genre:
         albums=mongo.db.albums.find_one({'id': encoded})
         if not albums:
-            url= request.base_url.replace("artists/","").replace(artist_ID,"")+ "/"+encoded 
-            tracks= request.base_url.replace("artists/","").replace(artist_ID,"")+  "/"+encoded + "/tracks"
-            artist= request.base_url+ "/"+artist_ID 
+            url= "https://tarea2artistas.herokuapp.com/" + "albums/" +encoded 
+            tracks= "https://tarea2artistas.herokuapp.com/" + "albums/" +encoded +"/tracks"
+            artist= "https://tarea2artistas.herokuapp.com/" + "artists/"+artist_ID 
             id = mongo.db.albums.insert_one({'name': name, 'id': encoded,'artist_id': artist_ID,'genre': genre,'url': url,'tracks': tracks})
             album=mongo.db.albums.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(album)
@@ -144,9 +146,9 @@ def create_track(album_ID):
         artist_ID=album["artist_id"]
         tracks=mongo.db.albums.find_one({'id': encoded})
         if not tracks:
-            url= request.base_url.replace("albums/","").replace(album_ID,"")+ encoded 
-            album= request.base_url.replace("tracks","")
-            artist= request.base_url.replace("albums/","").replace(album_ID,"").replace("tracks","")+"/artists/"+ artist_ID 
+            url= "https://tarea2artistas.herokuapp.com/" + "tracks/"+ encoded 
+            album= "https://tarea2artistas.herokuapp.com/albums"+ album_ID
+            artist= "https://tarea2artistas.herokuapp.com/artists/"+ artist_ID 
             id = mongo.db.tracks.insert_one({'name': name, 'id': encoded,'artist': artist,'duration': duration,'url': url,'album_id': album_ID,'times_played': 0})
             track=mongo.db.tracks.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(track)
