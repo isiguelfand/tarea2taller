@@ -11,11 +11,16 @@ nombre="mongodb+srv://user:"+"tallerintegracion"+"@cluster0.eikb3.mongodb.net/my
 app.config["MONGO_URI"] = nombre
 mongo=PyMongo(app)
 
+
 @app.route('/artists',methods=['POST'])
 def create_artist():
     request.get_json(force=True)
-    name=request.json["name"]
-    age=request.json["age"]
+    try: 
+        name=request.json["name"]
+        age=request.json["age"]
+    except KeyError:
+        return invalid()
+
     encoded = b64encode(name.encode()).decode('utf-8')
     if name and encoded and age:
         users=mongo.db.users.find_one({'id': encoded})
@@ -63,8 +68,12 @@ def show_artists():
 @app.route('/artists/<artist_ID>/albums',methods=['POST'])
 def create_album(artist_ID):
     request.get_json(force=True)
-    name=request.json["name"]
-    genre=request.json["genre"]
+    try: 
+        name=request.json["name"]
+        genre=request.json["genre"]
+    except KeyError:
+        return invalid()
+
     encoded = b64encode(name.encode()).decode('utf-8')
     user=mongo.db.users.find_one({'id': artist_ID},{'_id': False})
     if not user:
@@ -136,15 +145,18 @@ def show_tracks_album(album_ID):
 @app.route('/albums/<album_ID>/tracks',methods=['POST'])
 def create_track(album_ID):
     request.get_json(force=True)
-    name=request.json["name"]
-    duration=request.json["duration"]
+    try: 
+        name=request.json["name"]
+        duration=request.json["duration"]
+    except KeyError:
+        return invalid()
     encoded = b64encode(name.encode()).decode('utf-8')
     album=mongo.db.albums.find_one({'id': album_ID},{'_id': False})
     if not album:
         return invalid_parent("Album")
     if name and duration and encoded and album:
-        artist_ID=album["artist_id"]
-        tracks=mongo.db.albums.find_one({'id': encoded})
+        artist_ID=album["artist_id"]#
+        tracks=mongo.db.tracks.find_one({'id': encoded})
         if not tracks:
             url= "https://tarea2artistas.herokuapp.com/" + "tracks/"+ encoded 
             album= "https://tarea2artistas.herokuapp.com/albums"+ album_ID
@@ -269,6 +281,13 @@ def error(model,error=None):
     message=jsonify({'message': 'method not allowed'})
     message.status_code =405
     return message
+
+@app.errorhandler(500)
+def error_2(model,error=None):
+    message=jsonify({'message': 'input inválido'})
+    message.status_code =400
+    return message
+
 
 
 if __name__ == "__main__":
