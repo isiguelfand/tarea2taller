@@ -6,8 +6,8 @@ from bson import json_util
 from bson.objectid import ObjectId
 #from flask_restful import Api, Resource
 app = Flask(__name__)
-nombre="mongodb+srv://user:"+"tallerintegracion"+"@cluster0.eikb3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-#app.config["MONGO_URI"] = "mongodb://localhost/tarea"
+#nombre="mongodb+srv://user:"+"tallerintegracion"+"@cluster0.eikb3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = "mongodb://localhost/tarea"
 app.config["MONGO_URI"] = nombre
 mongo=PyMongo(app)
 
@@ -339,7 +339,7 @@ def invalid(error=None):
     return 400
 
 def deleted(model,error=None):
-    message=jsonify({'message':"})
+    #message=jsonify({'message':"})
     message.status_code =204
     return 204
 
