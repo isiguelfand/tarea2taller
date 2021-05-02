@@ -28,7 +28,7 @@ def create_artist():
             albums= "https://tarea2artistas.herokuapp.com/artists/" + encoded + "/albums"
             tracks= "https://tarea2artistas.herokuapp.com/artists/" + encoded + "/tracks"
             url= "https://tarea2artistas.herokuapp.com/artists/" + encoded
-            id = mongo.db.users.insert_one({'name': name, 'id': encoded,'albums': albums,'tracks': tracks,'url': url,'age': age})
+            id = mongo.db.users.insert_one({'name': name, 'id': encoded,'albums': albums,'tracks': tracks,'self': url,'age': age})
             user=mongo.db.users.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(user)
             response=Response(response,"application/json")
@@ -122,7 +122,7 @@ def create_album(artist_ID):
             url= "https://tarea2artistas.herokuapp.com/" + "albums/" +encoded 
             tracks= "https://tarea2artistas.herokuapp.com/" + "albums/" +encoded +"/tracks"
             artist= "https://tarea2artistas.herokuapp.com/" + "artists/"+artist_ID 
-            id = mongo.db.albums.insert_one({'name': name, 'id': encoded,'artist_id': artist_ID,'genre': genre,'url': url,'tracks': tracks})
+            id = mongo.db.albums.insert_one({'name': name, 'id': encoded,'artist_id': artist_ID,'genre': genre,'self': url,'tracks': tracks})
             album=mongo.db.albums.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(album)
             response=Response(response,"application/json")
@@ -199,7 +199,7 @@ def create_track(album_ID):
             url= "https://tarea2artistas.herokuapp.com/" + "tracks/"+ encoded 
             album= "https://tarea2artistas.herokuapp.com/albums"+ album_ID
             artist= "https://tarea2artistas.herokuapp.com/artists/"+ artist_ID 
-            id = mongo.db.tracks.insert_one({'name': name, 'id': encoded,'artist': artist,'duration': duration,'url': url,'album_id': album_ID,'times_played': 0})
+            id = mongo.db.tracks.insert_one({'name': name, 'id': encoded,'artist': artist,'duration': duration,'self': url,'album_id': album_ID,'times_played': 0})
             track=mongo.db.tracks.find_one({'id': encoded},{'_id': False})
             response=json_util.dumps(track)
             response=Response(response,"application/json")
