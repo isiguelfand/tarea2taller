@@ -315,7 +315,7 @@ def play_track_album(album_ID):
     else:
         tracks=mongo.db.tracks.find({'album_id': album_ID},{'_id': False})
         for x in tracks: 
-            mongo.db.tracks.update({'id': ID}, { "$set": { "times_played": track["times_played"]+1 } })
+            mongo.db.tracks.update({'album_id': album_ID}, { "$set": { "times_played": track["times_played"]+1 } })
         response=Response("canciones del álbum reproducidas","application/json")
         response.status_code =200
         return response
