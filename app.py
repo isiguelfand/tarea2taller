@@ -36,7 +36,12 @@ def create_artist():
             response.status_code = 201
             return response
         else:
-            return exists("artista ")
+            user=mongo.db.users.find_one({'id': encoded},{'_id': False})
+            response=json_util.dumps(user)
+            response=Response(response,"application/json")
+            #message=jsonify({'message': response, 'Code': 201})
+            response.status_code = 409
+            return response
     else:
         return invalid()
 
@@ -130,7 +135,12 @@ def create_album(artist_ID):
             response.status_code = 201
             return response
         else:
-            return exists("album ")
+            album=mongo.db.albums.find_one({'id': encoded},{'_id': False})
+            response=json_util.dumps(album)
+            response=Response(response,"application/json")
+            #message=jsonify({'message': response, 'Code': 201})
+            response.status_code = 409
+            return response
     else:
         return invalid()
 
@@ -207,7 +217,12 @@ def create_track(album_ID):
             response.status_code = 201
             return response
         else:
-            return exists("canción ")
+            track=mongo.db.tracks.find_one({'id': encoded},{'_id': False})
+            response=json_util.dumps(track)
+            response=Response(response,"application/json")
+            #message=jsonify({'message': response, 'Code': 201})
+            response.status_code = 409
+            return response
     else:
         return invalid()
 
