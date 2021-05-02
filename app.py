@@ -193,7 +193,7 @@ def create_track(album_ID):
     if not album:
         return invalid_parent("Album")
     if name and duration and encoded and album:
-        artist_ID=album["artist_id"]#
+        artist_ID=album["artist_id"]
         tracks=mongo.db.tracks.find_one({'id': encoded})
         if not tracks:
             url= "https://tarea2artistas.herokuapp.com/" + "tracks/"+ encoded 
@@ -321,6 +321,12 @@ def not_found(model,error=None):
 
 @app.errorhandler(404)
 def error(model,error=None):
+    message=jsonify({'message': 'method not allowed'})
+    message.status_code =405
+    return message
+
+@app.errorhandler(405)
+def error_405(model,error=None):
     message=jsonify({'message': 'method not allowed'})
     message.status_code =405
     return message
